@@ -135,9 +135,9 @@ for index, frame in enumerate(video):
 
         # calculate player in possession
         player_in_possession_detection, ball_detection = get_player_in_possession(
-                                        player_detections=player_detections,
-                                        ball_detections=ball_detection,
-                                        proximity=PLAYER_IN_POSSESSION_PROXIMITY)
+                                                         player_detections=player_detections,
+                                                         ball_detections=ball_detection,
+                                                         proximity=PLAYER_IN_POSSESSION_PROXIMITY)
 
 
         team_possession = get_team_in_possession(
@@ -148,40 +148,40 @@ for index, frame in enumerate(video):
         player_in_possession_detection = inertia_possession(player_possession = player_in_possession_detection, team_possession = team_possession)
 
         annotated_image = player_home_annotator.annotate(
-          image=annotated_image,
-          detections=tracked_player_home_detections)
+                          image=annotated_image,
+                          detections=tracked_player_home_detections)
 
         annotated_image = player_away_annotator.annotate(
-          image=annotated_image,
-          detections=tracked_player_away_detections)
+                          image=annotated_image,
+                          detections=tracked_player_away_detections)
 
         annotated_image = referee_annotator.annotate(
-          image=annotated_image,
-          detections=tracked_referee_detections)
+                          image=annotated_image,
+                          detections=tracked_referee_detections)
 
         annotated_image = ball_marker_annotator.annotate(
-          image=annotated_image,
-          detections=ball_detection,
-          width = MARKER_WIDTH,
-          height = MARKER_HEIGHT,
-          margin = MARKER_MARGIN,
-          thickness = MARKER_CONTOUR_THICKNESS,
-          color_contour=MARKER_CONTOUR_COLOR)
+                          image=annotated_image,
+                          detections=ball_detection,
+                          width = MARKER_WIDTH,
+                          height = MARKER_HEIGHT,
+                          margin = MARKER_MARGIN,
+                          thickness = MARKER_CONTOUR_THICKNESS,
+                          color_contour=MARKER_CONTOUR_COLOR)
 
         annotated_image = player_in_possession_marker_annotator.annotate(
-          image=annotated_image,
-          detections=[player_in_possession_detection] if player_in_possession_detection else [],
-          width = MARKER_WIDTH,
-          height = MARKER_HEIGHT,
-          margin = MARKER_MARGIN,
-          thickness = MARKER_CONTOUR_THICKNESS,
-          color_contour=MARKER_CONTOUR_COLOR)
-
-        annotated_image = draw_possession_counter(
-                          team_possession=team_possession,
-                          frame=PIL.Image.fromarray(annotated_image).copy(),
-                          counter_background=possession_background,
-                          args=args)
+                          image=annotated_image,
+                          detections=[player_in_possession_detection] if player_in_possession_detection else [],
+                          width = MARKER_WIDTH,
+                          height = MARKER_HEIGHT,
+                          margin = MARKER_MARGIN,
+                          thickness = MARKER_CONTOUR_THICKNESS,
+                          color_contour=MARKER_CONTOUR_COLOR)
+        if args.possession:
+            annotated_image = draw_possession_counter(
+                              team_possession=team_possession,
+                              frame=PIL.Image.fromarray(annotated_image).copy(),
+                              counter_background=possession_background,
+                              args=args)
 
     # save video frame
     video.write(annotated_image)

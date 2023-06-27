@@ -4,22 +4,34 @@ import PIL
 import matplotlib
 import torch
 
+from analysis.colors import Color
 from analysis.filter import filters
 from analysis.hsv_classifier import HSVClassifier
 from analysis.inertia_classifier import InertiaClassifier
-from analysis.colors import Color
+from analysis.possession import (
+    get_player_in_possession,
+    get_team_in_possession,
+    inertia_possession
+)
+
+from util.detection import (
+    Detection,
+    filter_class,
+    filter_classification,
+    true_ball
+)
+from util.track import (
+    BYTETrackerArgs,
+    detections2boxes,
+    match_detections_with_tracks
+)
 from draw.annotate import BaseAnnotator
 from draw.marker import MarkerAnntator
-
-from draw.draw_possession import get_possession_background, draw_possession_counter
-from analysis.possession import get_player_in_possession, get_team_in_possession, inertia_possession
-
+from draw.draw_possession import (
+    get_possession_background,
+    draw_possession_counter
+)
 from util.video import Video
-from util.detection import Detection, filter_class, filter_classification, true_ball
-from util.track import BYTETrackerArgs, detections2boxes, tracks2boxes, match_detections_with_tracks
-
-from util.options import args_parser
-
 from yolox.tracker.byte_tracker import BYTETracker
 
 args = args_parser()

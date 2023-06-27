@@ -32,6 +32,7 @@ from draw.draw_possession import (
     draw_possession_counter
 )
 from util.video import Video
+
 from yolox.tracker.byte_tracker import BYTETracker
 
 args = args_parser()

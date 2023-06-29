@@ -52,17 +52,17 @@ def filter_classification(detections: List[Detection], classification: str, reve
             detection for detection in detections if detection.classification != classification
         ]
 
-def true_ball(detections: List[Detection], ball_confidence: float) -> List[Detection]:
-    
-    if detections:
+def true_ball(detections: List[Detection], ball_confidence: float):
+
+    if len(detections) != 0:
         max_conf = 0.0
         for detection in detections:
           if detection.confidence > max_conf:
              result = detection
              max_conf = detection.confidence
         if result.confidence > ball_confidence:
-            return [result]
+            return result
         else:
-            return []
+            return None
     else:
-        return []
+        return None

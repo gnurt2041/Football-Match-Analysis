@@ -1,30 +1,18 @@
 from typing import List
+from dataclasses import dataclass
 from yolox.tracker.byte_tracker import STrack
 from onemetric.cv.utils.iou import box_iou_batch
 import numpy as np
 from util.detection import Detection
 
-"""
-BYTETracker does not assign tracker_id to existing bounding boxes but rather
-predicts the next bounding box position based on previous one. Therefore, we
-need to find a way to match our bounding boxes with predictions.
-
-usage example:
-
-byte_tracker = BYTETracker(BYTETrackerArgs())
-for frame in frames:
-    ...
-    results = model(frame, size=1280)
-    detections = Detection.from_results(
-        pred=results.pred[0].cpu().numpy(),
-        names=model.names)
-    ...
-    tracks = byte_tracker.update(
-        output_results=detections2boxes(detections=detections),
-        img_info=frame.shape,
-        img_size=frame.shape)
-    detections = match_detections_with_tracks(detections=detections, tracks=tracks)
-"""
+@dataclass(frozen=True)
+class BYTETrackerArgs:
+    track_thresh: float = 0.25
+    track_buffer: int = 30
+    match_thresh: float = 0.8
+    aspect_ratio_thresh: float = 3.0
+    min_box_area: float = 1.0
+    mot20: bool = False
 
 # converts List[Detection] into format that can be consumed by match_detections_with_tracks function
 def detections2boxes(detections: List[Detection], with_confidence: bool = True) -> np.ndarray:

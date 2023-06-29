@@ -20,16 +20,22 @@ def args_parser():
         help="Enable possession counter"
     )
     parser.add_argument(
-        "--possession_threshold",
-        type=int,
-        default=20,
-        help="Amount of consecutive frames new team has to have the ball in order to change possession"
+            "--possession_threshold",
+            type=int,
+            default=20,
+            help="Amount of consecutive frames new team has to have the ball in order to change possession"
+    )
+    parser.add_argument(
+            "--ball_conf",
+            type=float,
+            default=0.3,
+            help="Ball confidence threshold"
     )
     parser.add_argument(
         "--teams_name",
         nargs='+',
         type=str,
-        default=['MCI','RMA'],
+        default=['MUN','SEV'],
         help="Name of two teams"
     )
     parser.add_argument(
@@ -43,20 +49,20 @@ def args_parser():
         "--color_t1",
         nargs='+',
         type=str,
-        default=['sky_blue','orange'], # ['sky_blue','blueish_red','red']
+        default=['red','blue','sky_blue','blueish_red'], #['sky_blue','orange'], # ['sky_blue','blueish_red','red']
         help="Colors of two teams and refee, format: [c1,c2] -> [T1,T1]"
     )
     parser.add_argument(
         "--color_t2",
         nargs='+',
         type=str,
-        default=['black','red'], # ['blue','orange']
+        default=['white','yellow'],   #['black','red'], # ['blue','orange']
         help="Colors of two teams and refee, format: [c3,c4] -> [T2,T2]"
     )
     parser.add_argument(
         "--color_rf",
         type=str,
-        default='yellow', # 'black'
+        default='black', # 'yellow'
         help="Colors of two teams and refee, format: [c5] -> [R]"
     )
     parser.add_argument(
@@ -70,15 +76,15 @@ def args_parser():
         "--board_colors",
         nargs='+',
         type=tuple,
-        default=['skyblue','blue'],
+        default=['',''],
         help="Colors to draw classification of teams and refee, format: [c1,c2,c3] -> [T1,T2,R]"
     )
     parser.add_argument(
         "--text_colors",
         nargs='+',
         type=tuple,
-        default=['white','black'],
+        default=['',''],
         help="Colors to draw classification of teams and refee, format: [c1,c2,c3] -> [T1,T2,R]"
     )
     # args = parser.parse_args(args=[])
-    return parser.parse_args
+    return parser.parse_args()

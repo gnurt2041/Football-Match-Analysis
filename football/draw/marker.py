@@ -1,5 +1,5 @@
 from typing import List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import numpy as np
 from analysis.colors import Color
 from draw.point import Point
@@ -38,9 +38,9 @@ class MarkerAnntator:
     def annotate(self, image: np.ndarray, detections: List[Detection], width: int, height: int, margin: int, thickness: int, color_contour: Color) -> np.ndarray:
         annotated_image = image.copy()
         for detection in detections:
-            possession_marker_countour = calculate_marker(anchor=detection.rect.top_center, width = width, height = height, margin = margin)   
+            possession_marker_countour = calculate_marker(anchor=detection.rect.top_center, width = width, height = height, margin = margin)
             annotated_image = draw_marker(
-                image=image,
+                image=annotated_image.copy(),
                 countour = possession_marker_countour,
                 color=self.color,
                 color_contour = color_contour,

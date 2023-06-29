@@ -1,10 +1,11 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Tuple, Optional, List, Dict, Any
 
 import cv2
 
 import numpy as np
-
+import pandas as pd
 from analysis.colors import Color
 from draw.point import Point, Rect
 # base annotator
@@ -58,7 +59,7 @@ class BaseAnnotator:
         annotated_image = image.copy()
         for detection in detections:
             annotated_image = draw_ellipse(
-                image=image,
+                image=annotated_image.copy(),
                 rect=detection.rect,
                 color=self.colors,
                 thickness=self.thickness

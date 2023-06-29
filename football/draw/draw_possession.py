@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import PIL
 import numpy as np
 
@@ -494,7 +494,7 @@ def text_in_middle_rectangle(
         """
 
         draw = PIL.ImageDraw.Draw(img)
-        root_dir =  '/'.join(draw_possession.__file__.split('/')[:-1)
+        root_dir =  Path(__file__).parent
         if root_dir == '/content/drive/MyDrive/Football-Match-Analysis/football/draw/':
                 
                 return img

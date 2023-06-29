@@ -495,10 +495,9 @@ def text_in_middle_rectangle(
 
         draw = PIL.ImageDraw.Draw(img)
         root_dir =  os.getcwd().replace('\\','/')
-        print(root_dir)
-
+            
         if font is None:
-            font = PIL.ImageFont.truetype("/root_dir/draw/Gidole-Regular.ttf", size=18)
+            font = PIL.ImageFont.truetype(f"/{root_dir}/draw/Gidole-Regular.ttf", size=18)
             # font = PIL.ImageFont.load_default(size=24)
 
         w, h = draw.textsize(text, font=font)

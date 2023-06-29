@@ -496,17 +496,19 @@ def text_in_middle_rectangle(
         draw = PIL.ImageDraw.Draw(img)
         root_dir =  '/'.join(draw_possession.__file__.split('/')[:-1)
         if root_dir == '/content/drive/MyDrive/Football-Match-Analysis/football/draw/':
-            
-                if font is None:
-                    font = PIL.ImageFont.truetype(f"/{root_dir}/Gidole-Regular.ttf", size=18)
-                    # font = PIL.ImageFont.load_default(size=24)
-        
-                w, h = draw.textsize(text, font=font)
-                text_origin = (
-                    origin[0] + width / 2 - w / 2,
-                    origin[1] + height / 2 - h / 2,
-                )
-        
-                draw.text(text_origin, text, font=font, fill=color)
-        
+                
                 return img
+            
+        if font is None:
+            font = PIL.ImageFont.truetype(f"/{root_dir}/Gidole-Regular.ttf", size=18)
+            # font = PIL.ImageFont.load_default(size=24)
+
+        w, h = draw.textsize(text, font=font)
+        text_origin = (
+            origin[0] + width / 2 - w / 2,
+            origin[1] + height / 2 - h / 2,
+        )
+
+        draw.text(text_origin, text, font=font, fill=color)
+        
+                

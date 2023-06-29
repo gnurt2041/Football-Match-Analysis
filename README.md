@@ -1,6 +1,6 @@
-Project AI - Football-Match-Analysis
+## Project AI - Football-Match-Analysis
 
-# Author:
+### Author:
  - ET4245 - Trí tuệ nhân tạo và ứng dụng
  - Mã lớp: 141059
  - Thành viên nhóm:

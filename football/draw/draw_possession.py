@@ -1,3 +1,4 @@
+import os
 import PIL
 import numpy as np
 
@@ -493,9 +494,10 @@ def text_in_middle_rectangle(
         """
 
         draw = PIL.ImageDraw.Draw(img)
+        root_dir =  os.getcwd()
 
         if font is None:
-            font = PIL.ImageFont.truetype("/content/drive/MyDrive/football/draw/Gidole-Regular.ttf", size=18)
+            font = PIL.ImageFont.truetype("root_dir/Gidole-Regular.ttf", size=18)
             # font = PIL.ImageFont.load_default(size=24)
 
         w, h = draw.textsize(text, font=font)

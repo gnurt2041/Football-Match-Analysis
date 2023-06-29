@@ -86,10 +86,10 @@ def draw_possession_counter(
             counter_background=counter_background,
         )
         home_text = (
-                f"{np.round(possession_per_team[0] * 100, 0)}%"
+                f"{int(np.round(possession_per_team[0] * 100, 0))}%"
             )
         away_text = (
-                f"{np.round(possession_per_team[1] * 100, 0)}%"
+                f"{int(np.round(possession_per_team[1] * 100, 0))}%"
             )
         frame = draw_counter(
             frame,

@@ -1,4 +1,3 @@
-import PIL
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 def add_alpha(img: Image.Image, alpha: int = 100) -> Image.Image:

@@ -465,7 +465,7 @@ def text_in_middle_rectangle(
         width: int,
         height: int,
         text: str,
-        font:  ImageFont = None,
+        font: ImageFont = None,
         color=(255, 255, 255),
     ) -> Image.Image:
         """

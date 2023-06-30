@@ -34,11 +34,11 @@ from draw.draw_possession import (
 from util.video import Video
 
 from yolox.tracker.byte_tracker import BYTETracker
-
+# Arguments
 args = args_parser()
 print(args)
-# color settings
 
+# color settings
 # home color
 HOME_COLOR_HEX = matplotlib.colors.cnames[args.colors_draw[0]]
 HOME_COLOR = Color.from_hex_string(HOME_COLOR_HEX)
@@ -81,10 +81,11 @@ MARKER_HEIGHT = 15
 MARKER_MARGIN = 7
 
 # distance in pixels from the player's bounding box where we consider the ball is in his possession
-PLAYER_IN_POSSESSION_PROXIMITY = 45
+PLAYER_IN_POSSESSION_PROXIMITY = 40
 
 SOURCE_VIDEO_PATH = "./mun_sev_test.mp4"
-BOARD_IMG = "./football/draw/possession_board.png"
+BOARD_IMG = "./football/draw/board_possession.png"
+
 
 # initiate video reader and writer
 video = Video(input_path=SOURCE_VIDEO_PATH)
@@ -103,14 +104,13 @@ ball_marker_annotator = MarkerAnntator(
     color=BALL_MARKER_FILL_COLOR)
 player_in_possession_marker_annotator = MarkerAnntator(
     color=PLAYER_MARKER_FILL_COLOR)
-# Load the model
-model = torch.hub.load('.', 'custom', args.model, source='local')
+
 # HSV Classifier
 filters = filters(args)
 hsv_classifier = HSVClassifier(filters=filters)
 # Add inertia to classifier
 classifier = InertiaClassifier(classifier=hsv_classifier, inertia=20)
-possession_background  = get_possession_background(board_img = BOARD_IMG)
+possession_background  = get_possession_background(board_img = BOARD_IMG_PATH)
 # initiate tracker
 byte_tracker = BYTETracker(BYTETrackerArgs())
 team_possession = {}

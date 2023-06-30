@@ -1,19 +1,18 @@
-import os
 import PIL
 import numpy as np
-
-def add_alpha(img: PIL.Image.Image, alpha: int = 100) -> PIL.Image.Image:
+from PIL import Image, ImageDraw, ImageFont
+def add_alpha(img: Image.Image, alpha: int = 100) -> Image.Image:
         """
         Add an alpha channel to an image
         Parameters
         ----------
-        img : PIL.Image.Image
+        img : Image.Image
             Image
         alpha : int, optional
             Alpha value, by default 100
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Image with alpha channel
         """
         data = img.getdata()
@@ -31,23 +30,23 @@ def add_alpha(img: PIL.Image.Image, alpha: int = 100) -> PIL.Image.Image:
         return img
 
 def get_possession_background(board_img: str
-    ) -> PIL.Image.Image:
+    ) -> Image.Image:
         """
         Get possession counter background
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Counter background
         """
         
-        counter = PIL.Image.open(board_img).convert("RGBA")
+        counter =  Image.open(board_img).convert("RGBA")
         counter = add_alpha(counter, 210)
         counter = np.array(counter)
         width, height = counter.shape[1], counter.shape[0]
         red, green, blue, alpha = counter.T
         counter = np.array([blue, green, red, alpha])
         counter = counter.transpose()
-        counter = PIL.Image.fromarray(counter)
+        counter =  Image.fromarray(counter)
         counter = counter.resize((int(width * 0.6), int(height * 0.6)))
         return counter
         
@@ -55,26 +54,26 @@ def draw_possession_counter(
         team_possession,
         args,
         frame: np.array,
-        counter_background: PIL.Image.Image,
+        counter_background: Image.Image,
         debug: bool = False
     ) -> np.ndarray:
         """
         Draw elements of the possession in frame
         Parameters
         ----------
-        frame : PIL.Image.Image
+        frame : Image.Image
             Frame
-        counter_background : PIL.Image.Image
+        counter_background : Image.Image
             Counter background
         debug : bool, optional
             Whether to draw extra debug information, by default False
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Frame with elements of the match
         """
-        frame = PIL.Image.fromarray(frame).copy()
-        # get width of PIL.Image
+        frame =  Image.fromarray(frame).copy()
+        # get width of  Image
         frame_width = frame.size[0]
         counter_origin = (frame_width - 280, 20)
         if team_possession['duration'] == 0:
@@ -144,30 +143,30 @@ def get_time_possession(possession, fps: int) -> str:
         return f"{minutes}:{seconds}"
         
 def draw_counter_background(
-        frame: PIL.Image.Image,
+        frame: Image.Image,
         origin: tuple,
-        counter_background: PIL.Image.Image,
-    ) -> PIL.Image.Image:
+        counter_background: Image.Image,
+    ) -> Image.Image:
         """
         Draw counter background
         Parameters
         ----------
-        frame : PIL.Image.Image
+        frame : Image.Image
             Frame
         origin : tuple
             Origin (x, y)
-        counter_background : PIL.Image.Image
+        counter_background : Image.Image
             Counter background
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Frame with counter background
         """
         frame.paste(counter_background, origin, counter_background)
         return frame
 
 def draw_counter(
-        frame: PIL.Image.Image,
+        frame: Image.Image,
         text: str,
         counter_text: str,
         origin: tuple,
@@ -175,12 +174,12 @@ def draw_counter(
         text_color: tuple,
         height: int = 27,
         width: int = 50,
-    ) -> PIL.Image.Image:
+    ) -> Image.Image:
         """
         Draw counter
         Parameters
         ----------
-        frame : PIL.Image.Image
+        frame : Image.Image
             Frame
         text : str
             Text in left-side of counter
@@ -198,7 +197,7 @@ def draw_counter(
             Width, by default 120
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Frame with counter
         """
 
@@ -254,18 +253,18 @@ def draw_counter(
 
         return frame
 def possession_bar(percentage_possession, args,
-    frame: PIL.Image.Image, origin: tuple) -> PIL.Image.Image:
+    frame: Image.Image, origin: tuple) -> Image.Image:
         """
         Draw possession bar
         Parameters
         ----------
-        frame : PIL.Image.Image
+        frame : Image.Image
             Frame
         origin : tuple
             Origin (x, y)
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Frame with possession bar
         """
 
@@ -338,17 +337,17 @@ def possession_bar(percentage_possession, args,
         return frame
 
 def draw_counter_rectangle(
-        frame: PIL.Image.Image,
+        frame: Image.Image,
         ratio: float,
         left_rectangle: tuple,
         left_color: tuple,
         right_rectangle: tuple,
         right_color: tuple,
-    ) -> PIL.Image.Image:
+    ) -> Image.Image:
         """Draw counter rectangle for both teams
         Parameters
         ----------
-        frame : PIL.Image.Image
+        frame : Image.Image
             Video frame
         ratio : float
             counter proportion
@@ -362,7 +361,7 @@ def draw_counter_rectangle(
             color for the right team in counter
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Drawed video frame
         """
 
@@ -406,17 +405,17 @@ def draw_counter_rectangle(
 
         return frame
 def half_rounded_rectangle(
-        img: PIL.Image.Image,
+        img: Image.Image,
         rectangle: tuple,
         color: tuple,
         radius: int = 15,
         left: bool = False,
-    ) -> PIL.Image.Image:
+    ) -> Image.Image:
         """
         Draw a half rounded rectangle on the image
         Parameters
         ----------
-        img : PIL.Image.Image
+        img : Image.Image
             Image
         rectangle : tuple
             Rectangle to draw ( (xmin, ymin), (xmax, ymax) )
@@ -428,11 +427,11 @@ def half_rounded_rectangle(
             Whether the flat side is the left side, by default False
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Image with the half rounded rectangle drawn
         """
         overlay = img.copy()
-        draw = PIL.ImageDraw.Draw(overlay, "RGBA")
+        draw =  ImageDraw.Draw(overlay, "RGBA")
         draw.rounded_rectangle(rectangle, radius, fill=color)
 
         height = rectangle[1][1] - rectangle[0][1]
@@ -461,19 +460,19 @@ def half_rounded_rectangle(
         return overlay
         
 def text_in_middle_rectangle(
-        img: PIL.Image.Image,
+        img: Image.Image,
         origin: tuple,
         width: int,
         height: int,
         text: str,
-        font: PIL.ImageFont = None,
+        font:  ImageFont = None,
         color=(255, 255, 255),
-    ) -> PIL.Image.Image:
+    ) -> Image.Image:
         """
         Draw text in middle of rectangle
         Parameters
         ----------
-        img : PIL.Image.Image
+        img : Image.Image
             Image
         origin : tuple
             Origin of the rectangle (x, y)
@@ -483,20 +482,20 @@ def text_in_middle_rectangle(
             Height of the rectangle
         text : str
             Text to draw
-        font : PIL.ImageFont, optional
+        font :  ImageFont, optional
             Font to use, by default None
         color : tuple, optional
             Color of the text, by default (255, 255, 255)
         Returns
         -------
-        PIL.Image.Image
+         Image.Image
             Image with the text drawn
         """
 
-        draw = PIL.ImageDraw.Draw(img)
+        draw = ImageDraw.Draw(img)
         if font is None:
-            font = PIL.ImageFont.truetype("/content/drive/MyDrive/Football-Match-Analysis/football/draw/Gidole-Regular.ttf", size=18)
-            # font = PIL.ImageFont.load_default(size=24)
+            font = ImageFont.truetype("/content/drive/MyDrive/Football-Match-Analysis/football/draw/Gidole-Regular.ttf", size=18)
+            # font =  ImageFont.load_default(size=24)
 
         w, h = draw.textsize(text, font=font)
         text_origin = (

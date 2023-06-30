@@ -119,82 +119,96 @@ team_possession = {}
 # loop over frames
 for index, frame in enumerate(video):
 
+    # initiate annotate video frame
     annotated_image = frame.copy()
-    # run detector
-    results = model(frame[...,::-1], size=1280)
+
+    #------------------------------------------------------------RUN DETECTION AND CONVERT TO DETECTION CLASS------------------------------------------------------------#
+
+    frame_rgb = frame[...,::-1].copy()
+    results = model(frame_rgb, size=1280)
     detections = Detection.from_numpy(
-        pred=results.pred[0].cpu().numpy(),
+        pred=results.pred[0].cpu().numpy().copy(),
         names=model.names)
 
-    ball_detections = filter_class(detections=detections, class_id=0)
-    ball_detection = true_ball(detections=ball_detections, ball_confidence = args.ball_conf) 
-    tracked_person_detections = filter_class(detections=detections, class_id=0, reverse=True)
+    #------------------------------------------------------------FILTER OF BALL AND PERSON------------------------------------------------------------#
 
-    # track
+    ball_detections = filter_class(detections=detections.copy(), class_id=0)
+    ball_detection = true_ball(detections=ball_detections.copy(), ball_confidence = args.ball_conf)
+
+    tracked_person_detections = filter_class(detections=detections.copy(), class_id=0, reverse=True)
+
+    #------------------------------------------------------------TRACKING AND MATCH TO DETECTION------------------------------------------------------------#
+
     if len(tracked_person_detections) != 0:
         tracks = byte_tracker.update(
-                output_results=detections2boxes(detections=tracked_person_detections),
+                output_results=detections2boxes(detections=tracked_person_detections.copy()),
                 img_info=frame.shape,
                 img_size=frame.shape
         )
-        tracked_detections = match_detections_with_tracks(detections=tracked_person_detections, tracks=tracks)
-        tracked_person_detections_pd = classifier.predict_from_detections(detections=tracked_detections.copy(), img=frame)
+        tracked_detections = match_detections_with_tracks(detections=tracked_person_detections.copy(), tracks=tracks.copy())
 
-        tracked_referee_detections = filter_classification(detections = tracked_person_detections_pd, classification="Referee")
-        tracked_player_home_detections = filter_classification(detections = tracked_person_detections_pd, classification = args.teams_name[0])
-        tracked_player_away_detections = filter_classification(detections = tracked_person_detections_pd, classification = args.teams_name[1])
+        #------------------------------------------------------------CLASSIFY TWO TEAM AND REFEREE------------------------------------------------------------#
 
+        tracked_person_detections_pd = classifier.predict_from_detections(detections=tracked_detections.copy(), img=frame.copy())
+
+        tracked_referee_detections = filter_classification(detections = tracked_person_detections_pd.copy(), classification="Referee")
+        tracked_player_home_detections = filter_classification(detections = tracked_person_detections_pd.copy(), classification = args.teams_name[0])
+        tracked_player_away_detections = filter_classification(detections = tracked_person_detections_pd.copy(), classification = args.teams_name[1])
         player_detections = tracked_player_home_detections + tracked_player_away_detections
 
-        # calculate player in possession
-        player_in_possession_detection, ball_detection = get_player_in_possession(
-                                                         player_detections=player_detections,
-                                                         ball_detections=ball_detection,
-                                                         proximity=PLAYER_IN_POSSESSION_PROXIMITY)
+        #------------------------------------------------------------FIND PLAYER IN POSSESSION OF BALL------------------------------------------------------------#
 
+        player_in_possession_detection = get_player_in_possession(
+                                         player_detections=player_detections.copy(),
+                                         ball_detections=[ball_detection] if ball_detection else [],
+                                         proximity=PLAYER_IN_POSSESSION_PROXIMITY)
 
         team_possession = get_team_in_possession(
-                          team_possession = team_possession,
+                          team_possession = team_possession.copy(),
                           player_possession = player_in_possession_detection,
                           args=args)
 
-        player_in_possession_detection = inertia_possession(player_possession = player_in_possession_detection, team_possession = team_possession)
+        player_in_possession_detection = inertia_possession(player_possession = player_in_possession_detection, team_possession = team_possession.copy())
+
+        #------------------------------------------------------------ANNOTATE ON FRAME------------------------------------------------------------#
 
         annotated_image = player_home_annotator.annotate(
-                          image=annotated_image,
-                          detections=tracked_player_home_detections)
+          image=annotated_image.copy(),
+          detections=tracked_player_home_detections.copy())
 
         annotated_image = player_away_annotator.annotate(
-                          image=annotated_image,
-                          detections=tracked_player_away_detections)
+          image=annotated_image.copy(),
+          detections=tracked_player_away_detections.copy())
 
         annotated_image = referee_annotator.annotate(
-                          image=annotated_image,
-                          detections=tracked_referee_detections)
+          image=annotated_image.copy(),
+          detections=tracked_referee_detections.copy())
 
         annotated_image = ball_marker_annotator.annotate(
-                          image=annotated_image,
-                          detections=ball_detection,
-                          width = MARKER_WIDTH,
-                          height = MARKER_HEIGHT,
-                          margin = MARKER_MARGIN,
-                          thickness = MARKER_CONTOUR_THICKNESS,
-                          color_contour=MARKER_CONTOUR_COLOR)
+          image=annotated_image.copy(),
+          detections=[ball_detection] if ball_detection else [],
+          width = MARKER_WIDTH,
+          height = MARKER_HEIGHT,
+          margin = MARKER_MARGIN,
+          thickness = MARKER_CONTOUR_THICKNESS,
+          color_contour=MARKER_CONTOUR_COLOR)
 
         annotated_image = player_in_possession_marker_annotator.annotate(
-                          image=annotated_image,
-                          detections=[player_in_possession_detection] if player_in_possession_detection else [],
-                          width = MARKER_WIDTH,
-                          height = MARKER_HEIGHT,
-                          margin = MARKER_MARGIN,
-                          thickness = MARKER_CONTOUR_THICKNESS,
-                          color_contour=MARKER_CONTOUR_COLOR)
-        if args.possession:
-            annotated_image = draw_possession_counter(
-                              team_possession=team_possession,
-                              frame=PIL.Image.fromarray(annotated_image).copy(),
-                              counter_background=possession_background,
-                              args=args)
+          image=annotated_image.copy(),
+          detections=[player_in_possession_detection] if player_in_possession_detection else [],
+          width = MARKER_WIDTH,
+          height = MARKER_HEIGHT,
+          margin = MARKER_MARGIN,
+          thickness = MARKER_CONTOUR_THICKNESS,
+          color_contour=MARKER_CONTOUR_COLOR)
 
-    # save video frame
-    video.write(annotated_image)
+        if args.possession:
+           annotated_image = draw_possession_counter(
+                             team_possession=team_possession.copy(),
+                             frame=annotated_image.copy(),
+                             counter_background=possession_background.copy(),
+                             args=args)
+
+    #------------------------------------------------------------SAVE ANNOTATED FRAME------------------------------------------------------------#
+
+    video.write(annotated_image.copy())

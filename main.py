@@ -1,6 +1,5 @@
 
 import cv2
-import PIL
 import matplotlib
 import torch
 
@@ -34,6 +33,7 @@ from draw.draw_possession import (
 from util.video import Video
 
 from yolox.tracker.byte_tracker import BYTETracker
+
 # Arguments
 args = args_parser()
 print(args)
@@ -81,13 +81,13 @@ MARKER_MARGIN = 7
 # distance in pixels from the player's bounding box where we consider the ball is in his possession
 PLAYER_IN_POSSESSION_PROXIMITY = 40
 
-SOURCE_VIDEO_PATH = "./mun_sev_test.mp4"
 BOARD_IMG = "./football/draw/board_possession.png"
 
+# load model
+model = torch.hub.load("ultralytics/yolov5", "custom", path=args.model)
 
 # initiate video reader and writer
-video = Video(input_path=SOURCE_VIDEO_PATH)
-args.fps = video.video_capture.get(cv2.CAP_PROP_FPS)
+video = Video(input_path=args.source)
 
 # initiate annotators
 THICKNESS = 4

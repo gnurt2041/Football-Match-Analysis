@@ -51,12 +51,11 @@ def get_team_in_possession(player_possession: Detection, args, team_possession: 
             team_possession['counter'] = 0
         team_possession[team_possession['true_current_team']] += 1
         team_possession['duration'] += 1
+        team_possession['counter'] += 1
         if player_possession is not None:
            if team_possession['current_team'] != player_possession.classification :
                 team_possession['counter'] = 0
                 team_possession['current_team'] = player_possession.classification
-
-           team_possession['counter'] += 1
 
            if team_possession['counter'] >= args.possession_threshold :
                 team_possession['true_current_team'] = team_possession['current_team']

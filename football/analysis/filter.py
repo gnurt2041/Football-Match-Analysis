@@ -18,10 +18,10 @@ def filters(args):
             for item in all:
                 if color == item['name']:
                     colors_away.append(item)
-        colors_rf = []
+        colors_referee = []
         for item in all:
-            if args.color_rf == item['name']:
-                colors_rf.append(item)
+            if args.color_referee == item['name']:
+                colors_referee.append(item)
 
     if len(args.colors) == 0:
         if len(colors_home) > 1:
@@ -32,11 +32,11 @@ def filters(args):
             colors_away = list(colors_away)
         else:
             colors_away = colors_away
-        colors_rf = colors_rf
+        colors_referee = colors_referee
     else:
         colors_home = list(colors[:2])
         colors_away = list(colors[2:4])
-        colors_rf = [colors[-1]]
+        colors_referee = [colors[-1]]
 
     team_1_filter = {
         "name": args.teams_name[0],
@@ -50,7 +50,7 @@ def filters(args):
 
     referee_filter = {
         "name": "Referee",
-        "colors": colors_rf,
+        "colors": colors_referee,
     }
     filters = [
         team_1_filter,

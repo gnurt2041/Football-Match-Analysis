@@ -48,9 +48,9 @@ def filter_classification(detections: List[Detection], classification: str, reve
               detection for detection in detections if detection.classification == classification
         ]
     else:
-        return [
-            detection for detection in detections if detection.classification != classification
-        ]
+        pre_detections =  [detection for detection in detections if detection.classification != classification]
+        mean_area_detections = np.mean([detection.rect.area for detection in pre_detections)
+        return [detection for detection in detections if detection.rect.area > mean_area_detections*0.2]
 
 def true_ball(detections: List[Detection], ball_confidence: float):
 

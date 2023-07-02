@@ -74,7 +74,7 @@ def draw_possession_counter(
         frame =  Image.fromarray(frame).copy()
         # get width of  Image
         frame_width = frame.size[0]
-        counter_origin = (frame_width - 300, 20)
+        counter_origin = (frame_width - 330, 20)
         if team_possession['duration'] == 0:
           possession_per_team = np.zeros(2)
         else:
@@ -92,7 +92,7 @@ def draw_possession_counter(
             )
         frame = draw_counter(
             frame,
-            origin=(counter_origin[0] + 5, counter_origin[1] + 70),
+            origin=(counter_origin[0] + 5, counter_origin[1] + 75),
             text=args.teams_name[0],
             counter_text = home_text,
             color=args.board_colors[0],
@@ -102,7 +102,7 @@ def draw_possession_counter(
         )
         frame = draw_counter(
             frame,
-            origin=(counter_origin[0] + 5 + 105, counter_origin[1] + 70),
+            origin=(counter_origin[0] + 5 + 110, counter_origin[1] + 75),
             text=args.teams_name[1],
             counter_text = away_text,
             color=args.board_colors[1],

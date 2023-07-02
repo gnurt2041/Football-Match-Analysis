@@ -74,7 +74,7 @@ def draw_possession_counter(
         frame =  Image.fromarray(frame).copy()
         # get width of  Image
         frame_width = frame.size[0]
-        counter_origin = (frame_width - 300, 20)
+        counter_origin = (frame_width - 400, 20)
         if team_possession['duration'] == 0:
           possession_per_team = np.zeros(2)
         else:

@@ -38,7 +38,6 @@ from yolox.tracker.byte_tracker import BYTETracker
 args = args_parser()
 print(args)
 
-# color settings
 # home color
 HOME_COLOR_HEX = matplotlib.colors.cnames[args.colors_draw[0]]
 HOME_COLOR = Color.from_hex_string(HOME_COLOR_HEX)
@@ -46,6 +45,10 @@ HOME_COLOR = Color.from_hex_string(HOME_COLOR_HEX)
 # away color
 AWAY_COLOR_HEX = matplotlib.colors.cnames[args.colors_draw[1]]
 AWAY_COLOR = Color.from_hex_string(AWAY_COLOR_HEX)
+
+# refree color
+REFEREE_COLOR_HEX = matplotlib.colors.cnames[args.colors_draw[2]]
+REFEREE_COLOR = Color.from_hex_string(REFEREE_COLOR_HEX)
 
 # possession board and text color
 HOME_BOARD_HEX = matplotlib.colors.cnames['skyblue']
@@ -56,11 +59,6 @@ AWAY_BOARD_HEX = matplotlib.colors.cnames['royalblue']
 args.board_colors[1] = Color.from_hex_string(AWAY_BOARD_HEX).bgr_tuple
 AWAY_TEXT_HEX = matplotlib.colors.cnames['white']
 args.text_colors[1] = Color.from_hex_string(AWAY_TEXT_HEX).bgr_tuple
-
-# annotation color
-# refree color
-REFEREE_COLOR_HEX = matplotlib.colors.cnames[args.colors_draw[2]]
-REFEREE_COLOR = Color.from_hex_string(REFEREE_COLOR_HEX)
 
 # marker color
 MARKER_CONTOUR_COLOR_HEX = "000000"

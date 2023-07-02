@@ -38,12 +38,12 @@ def filters(args):
         colors_away = list(colors[2:4])
         colors_referee = [colors[-1]]
 
-    team_1_filter = {
+    home_filter = {
         "name": args.teams_name[0],
         "colors": colors_home,
     }
 
-    team_2_filter = {
+    away_filter = {
         "name": args.teams_name[1],
         "colors": colors_away,
     }
@@ -53,8 +53,8 @@ def filters(args):
         "colors": colors_referee,
     }
     filters = [
-        team_1_filter,
-        team_2_filter,
+        home_filter,
+        away_filter,
         referee_filter
     ]
     return filters

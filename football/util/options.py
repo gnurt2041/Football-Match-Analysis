@@ -12,9 +12,6 @@ def args_parser():
         "--model", default="/model.pt", type=str, help="Path to the model"
     )
     parser.add_argument(
-        "--fps", default=30, type=int, help="FPS of the video"
-    )
-    parser.add_argument(
         "--possession",
         action="store_true",
         help="Enable possession counter"

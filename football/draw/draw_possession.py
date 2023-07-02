@@ -112,34 +112,6 @@ def draw_possession_counter(
         )
 
         return np.array(frame)
-def get_time_possession(possession, fps: int) -> str:
-        """
-        Return team possession in time format
-        Parameters
-        ----------
-        fps : int
-            Frames per second
-        Returns
-        -------
-        str
-            Team possession in time format (mm:ss)
-        """
-
-        seconds = round(possession / fps)
-        minutes = seconds // 60
-        seconds = seconds % 60
-
-        # express seconds in 2 digits
-        seconds = str(seconds)
-        if len(seconds) == 1:
-            seconds = "0" + seconds
-
-        # express minutes in 2 digits
-        minutes = str(minutes)
-        if len(minutes) == 1:
-            minutes = "0" + minutes
-
-        return f"{minutes}:{seconds}"
         
 def draw_counter_background(
         frame: Image.Image,

@@ -71,18 +71,8 @@ class Rect:
             width=self.width + 2*padding,
             height=self.height + 2*padding
         )
-    def pad_specific(self, scale_x: float, scale_y: float):
-        return Rect(
-            width=self.width*scale_x,
-            height=self.height*scale_y,
-            x=self.x,
-            y=self.y + self.height*(1 - scale_y)
-        ),Rect(
-            width=self.width*scale_x,
-            height=self.height*scale_y,
-            x=self.x + (self.width*scale_x)*(1-scale_x),
-            y=self.y + self.height*(1 - scale_y)
-        )
+    def area(self):
+        return np.round(self.width*self.height, 1)
 
     def contains_point(self, point: Point) -> bool:
         return self.min_x < point.x < self.max_x and self.min_y < point.y < self.max_y

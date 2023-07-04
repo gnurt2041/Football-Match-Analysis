@@ -47,12 +47,6 @@ class Video:
         Notice that some fourcc are not compatible with some extensions.
     output_extension : str, optional
         File extension used for the output video. Ignored if `output_path` is not a folder.
-    Examples
-    --------
-    >>> video = Video(input_path="video.mp4")
-    >>> for frame in video:
-    >>>     # << Your modifications to the frame would go here >>
-    >>>     video.write(frame)
     """
 
     def __init__(
@@ -142,7 +136,6 @@ class Video:
             process_fps=0,
         )
 
-    # This is a generator, note the yield keyword below.
     def __iter__(self):
         with self.progress_bar as progress_bar:
             start = time.time()
@@ -168,10 +161,6 @@ class Video:
         self.video_capture.release()
         cv2.destroyAllWindows()
 
-    def _fail(self, msg: str):
-        print(msg)
-        exit()
-
     def write(self, frame: np.ndarray) -> int:
         """
         Write one frame to the output video.
@@ -182,12 +171,11 @@ class Video:
         Returns
         -------
         int
-            _description_
         """
         if self.output_video is None:
             # The user may need to access the output file path on their code
             output_file_path = self.get_output_file_path()
-            fourcc = cv2.VideoWriter_fourcc(*self.get_codec_fourcc(output_file_path))
+            fourcc = cv2.VideoWriter_fourcc(*self.get_codec(output_file_path))
             # Set on first frame write in case the user resizes the frame in some way
             output_size = (
                 frame.shape[1],
@@ -201,33 +189,6 @@ class Video:
             )
 
         self.output_video.write(frame)
-        return cv2.waitKey(1)
-
-    def show(self, frame: np.ndarray, downsample_ratio: float = 1.0) -> int:
-        """
-        Display a frame through a GUI. Usually used inside a video inference loop to show the output video.
-        Parameters
-        ----------
-        frame : np.ndarray
-            The OpenCV frame to be displayed.
-        downsample_ratio : float, optional
-            How much to downsample the frame being show.
-            Useful when streaming the GUI video display through a slow internet connection using something like X11 forwarding on an ssh connection.
-        Returns
-        -------
-        int
-            _description_
-        """
-        # Resize to lower resolution for faster streaming over slow connections
-        if downsample_ratio != 1.0:
-            frame = cv2.resize(
-                frame,
-                (
-                    frame.shape[1] // downsample_ratio,
-                    frame.shape[0] // downsample_ratio,
-                ),
-            )
-        cv2.imshow("Output", frame)
         return cv2.waitKey(1)
 
     def get_output_file_path(self) -> str:
@@ -250,26 +211,21 @@ class Video:
 
         return os.path.join(self.output_path, file_name)
 
-    def get_codec_fourcc(self, filename: str) -> Optional[str]:
+    def get_codec(self, filename: str) -> Optional[str]:
         if self.output_fourcc is not None:
             return self.output_fourcc
-
+            
         # Default codecs for each extension
         extension = filename[-3:].lower()
-        if "avi" == extension:
-            return "XVID"
-        elif "mp4" == extension:
-            return "mp4v"  # When available, "avc1" is better
+        if  extension == "mp4" :
+            return "mp4v" 
         else:
             self._fail(
                 f"[bold red]Could not determine video codec for the provided output filename[/bold red]: "
                 f"[yellow]{filename}[/yellow]\n"
-                f"Please use '.mp4', '.avi', or provide a custom OpenCV fourcc codec name."
+                f"Please use '.mp4' or provide a custom OpenCV fourcc codec name."
             )
-            return (
-                None  # Had to add this return to make mypya happy. I don't like this.
-            )
-
+            return ''
     def abbreviate_description(self, description: str) -> str:
         """Conditionally abbreviate description so that progress bar fits in small terminals"""
         terminal_columns, _ = get_terminal_size()

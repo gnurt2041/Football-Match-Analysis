@@ -5,14 +5,11 @@ from util.detection import Detection
 
 class InertiaClassifier:
 
-    WINDOW = 1
-    FIRST_N = 2
-
     def __init__(
         self,
         classifier: BaseClassifier,
         inertia: int = 20,
-        mode: int = WINDOW,
+        mode: int = 1,
     ):
         """
 
@@ -59,39 +56,7 @@ class InertiaClassifier:
             detection.classification
         )
 
-    def should_classify(self, detection: Detection) -> bool:
-        """
-        Check if the detection should be classified.
-
-        This improves performance for modes such as first_n. Because
-        only at the first n detections of the id the classifier will be called.
-
-        Parameters
-        ----------
-        detection : Detection
-            Detection to check.
-
-        Returns
-        -------
-        bool
-            True if the detection should be classified.
-        """
-
-        if self.mode == InertiaClassifier.WINDOW:
-            return True
-
-        elif self.mode == InertiaClassifier.FIRST_N:
-
-            if detection.tracker_id not in self.classifications_per_id:
-                return True
-            elif len(self.classifications_per_id[detection.tracker_id]) < self.inertia:
-                return True
-            else:
-                return False
-
-        raise ValueError("Invalid mode")
-
-    def add_classification_to_window(self, detection: Detection):
+    def add_classification_to_frame(self, detection: Detection):
         """
         Add a new classification using window mode.
 
@@ -111,22 +76,6 @@ class InertiaClassifier:
             self.classifications_per_id[detection.tracker_id].pop(0)
             self.add_new_clasification_to_id(detection)
 
-    def add_first_n_classification(self, detection: Detection):
-        """
-        Add a new classification using first n mode.
-
-        Parameters
-        ----------
-        detection : Detection
-            Detection to add the classification to.
-        """
-
-        if detection.tracker_id not in self.classifications_per_id:
-            self.add_first_classification_to_id(detection)
-
-        elif len(self.classifications_per_id[detection.tracker_id]) < self.inertia:
-            self.add_new_clasification_to_id(detection)
-
     def add_new_clasifications(self, detections: List[Detection]):
         """
         Load internal dictionary with new classifications.
@@ -138,11 +87,7 @@ class InertiaClassifier:
         """
 
         for detection in detections:
-
-            if self.mode == InertiaClassifier.WINDOW:
-                self.add_classification_to_window(detection)
-            elif self.mode == InertiaClassifier.FIRST_N:
-                self.add_first_n_classification(detection)
+            self.add_classification_to_frame(detection)
 
     def set_detections_classification(
         self, detections: List[Detection]
@@ -166,7 +111,6 @@ class InertiaClassifier:
             detection.classification = max(
                 set(previous_classifications), key=previous_classifications.count
             )
-
         return detections
 
     def predict_from_detections(
@@ -189,12 +133,8 @@ class InertiaClassifier:
         """
 
         # Filter detections for clasificiations
-        detections_for_classification = [
-            detection for detection in detections if self.should_classify(detection)
-        ]
-
         detections_classified = self.classifier.predict_from_detections(
-            detections=detections_for_classification,
+            detections=detections,
             img=img,
         )
 

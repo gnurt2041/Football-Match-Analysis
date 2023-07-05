@@ -38,7 +38,6 @@ def filter_class(detections: List[Detection], class_id: int, reverse: bool = Fal
               detection for detection in detections if detection.class_id == class_id
         ]
     else:
-        # pre_detections =  [detection for detection in detections if detection.classification != classification]
         mean_area_detections = np.mean(np.array([detection.rect.area() for detection in detections if detection.class_id != class_id]))
         return [detection for detection in detections if detection.rect.area() > mean_area_detections*0.2 and detection.class_id != class_id]
 

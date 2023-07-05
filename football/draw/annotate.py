@@ -10,16 +10,6 @@ from analysis.colors import Color
 from draw.point import Point, Rect
 # base annotator
 
-def draw_rect(image: np.ndarray, rect: Rect, color: Color, thickness: int = 2) -> np.ndarray:
-    cv2.rectangle(image, rect.top_left.int_xy_tuple, rect.bottom_right.int_xy_tuple, color.bgr_tuple, thickness)
-    return image
-
-
-def draw_filled_rect(image: np.ndarray, rect: Rect, color: Color) -> np.ndarray:
-    cv2.rectangle(image, rect.top_left.int_xy_tuple, rect.bottom_right.int_xy_tuple, color.bgr_tuple, -1)
-    return image
-
-
 def draw_polygon(image: np.ndarray, countour: np.ndarray, color: Color, thickness: int = 2) -> np.ndarray:
     cv2.drawContours(image, [countour], 0, color.bgr_tuple, thickness)
     return image

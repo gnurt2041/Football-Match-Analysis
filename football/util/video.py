@@ -42,9 +42,7 @@ class Video:
         Label to add to the progress bar that appears when processing the current video.
     output_fourcc : Optional[str], optional
         OpenCV encoding for output video file.
-        By default we use `mp4v` for `.mp4` and `XVID` for `.avi`. This is a combination that works on most systems but
-        it results in larger files. To get smaller files use `avc1` or `H264` if available.
-        Notice that some fourcc are not compatible with some extensions.
+        By default we use `mp4v`
     output_extension : str, optional
         File extension used for the output video. Ignored if `output_path` is not a folder.
     """
@@ -214,11 +212,11 @@ class Video:
     def get_codec(self, filename: str) -> Optional[str]:
         if self.output_fourcc is not None:
             return self.output_fourcc
-            
+
         # Default codecs for each extension
         extension = filename[-3:].lower()
         if  extension == "mp4" :
-            return "mp4v" 
+            return "mp4v"
         else:
             self._fail(
                 f"[bold red]Could not determine video codec for the provided output filename[/bold red]: "

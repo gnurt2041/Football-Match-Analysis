@@ -19,11 +19,6 @@ def draw_filled_polygon(image: np.ndarray, countour: np.ndarray, color: Color) -
     return image
 
 
-def draw_text(image: np.ndarray, anchor: Point, text: str, color: Color, thickness: int = 2) -> np.ndarray:
-    cv2.putText(image, text, anchor.int_xy_tuple, cv2.FONT_HERSHEY_SIMPLEX, 0.7, color.bgr_tuple, thickness, 2, False)
-    return image
-
-
 def draw_ellipse(image: np.ndarray, rect: Rect, color: Color, thickness: int = 2) -> np.ndarray:
 
     cv2.ellipse(

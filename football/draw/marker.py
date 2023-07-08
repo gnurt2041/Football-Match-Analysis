@@ -1,5 +1,5 @@
 from typing import List
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import numpy as np
 from analysis.colors import Color
 from draw.point import Point

@@ -91,10 +91,6 @@ class BaseClassifier(ABC):
         List[norfair.Detection]
             List of detections with the class of the objects
         """
-        # if not all(
-        #     isinstance(detection, Detection) for detection in detections
-        # ):
-        #     raise TypeError("detections must be a list of Detection")
 
         box_images = []
 

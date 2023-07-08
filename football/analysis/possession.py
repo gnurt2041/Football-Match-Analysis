@@ -29,18 +29,6 @@ def get_player_in_possession(
     else:
       return None
 
-# MCI dang co bong, bong bay qua 1 tk RMA, thi van tinh cho tim hien tai la team MCI 1 khung hinh co bong,
-# thoi gian van tan + them 1, 
-# khi nay dieu khien team hien tai se khac vs team cua tk RMA do RMA != MCI
-# bat dau dem so khung hinh (counter = 0)
-# cong them 1 vi tinh tu day la khung hinh dau tien RMA gan bong nhat
-# neu so khung hinh dem cua team moi( khac team cu >=20) va thang hien tai co tk player thi doi team hien tai sang tk player
-# bat dau dem thoi gian moi cua doi moi
-# khi nao so khung hinh doi moi co bong >= 20 thi moi cho phep doi duoc thuc su kiem soat bong
-
-# Khi bat dau tran dau, doi da truoc se la doi hien tai co bong
-# van cong so khung hinh doi co bong, ke ca hon 20 thi doi co bong van la doi hien tai
-# neu sau 20 khung hinh, co mot khung hinh doi doi phuong co bong thi se xu ly nhu tren
 def get_team_in_possession(player_possession: Detection, args, team_possession: dict = {}) -> dict:
         if not team_possession :
             team_possession[args.teams_name[0]] = 0

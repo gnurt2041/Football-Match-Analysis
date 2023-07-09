@@ -1,9 +1,6 @@
-import json
-import os
 from abc import ABC, abstractmethod
-from typing import Counter, List, Tuple
+from typing import List
 
-import cv2
 import numpy as np
 import pandas as pd
 

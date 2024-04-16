@@ -4,7 +4,7 @@ The objective of the project is to identify and track four objects: player, refe
 # Model training
 All the training codes with YoloV5 are in the [train.ipynb](https://github.com/gnurt2041/Football-Match-Analysis/blob/main/train.ipynb). It includes how to download the my dataset with about 2800 images and some arguments for the training progress.
 
-My training progress was running on Google Colab Pro with high-ram (25GB) configures (If possible, I recommend using this high-ram configuration to help reduce bottelneck when loading data to the GPU). My training is continuous, so each full 300 epochs training would take 55 hours on Tesla T4 16GB and 27 hours on A100 40GB.
+My training progress was running on Google Colab Pro with high-ram (25GB) (If possible, I recommend using this high-ram configuration to help reduce bottelneck when loading data to the GPU). My training is continuous, so each full 300 epochs training would take 55 hours on Tesla T4 16GB and 27 hours on A100 40GB.
 
 After fully training the Yolov5 model, the results should look like this:
 <p align="center">

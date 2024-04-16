@@ -1,6 +1,6 @@
 [![Vietnamese](https://img.shields.io/badge/lang-vi-blue)](https://github.com/gnurt2041/Football-Match-Analysis/blob/main/README.vi.md)
 # An application of Yolov5 and ByteTrack in football match analysis based on broadcast video
-The objective of the project is to identify and track four objects: player, referee, goalkeeper and ball. Then, based on the inertial algorithm, calculate the percentage of ball possession between the two teams in the match video.
+The objective of the project is to identify and track four objects: player, referee, goalkeeper and ball. Then, based on the inertial algorithm, I calculate the percentage of ball possession between the two teams in the match video.
 # Model training
 All the training codes with YoloV5 are in the [train.ipynb](https://github.com/gnurt2041/Football-Match-Analysis/blob/main/train.ipynb). It includes how to download the my dataset with about 2800 images and some arguments for the training progress.
 
